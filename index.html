@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Kurnool Bakery — Freshly Baked, Lovingly Crafted</title>
+  <meta name="description" content="Artisan bakery in the heart of Kurnool, Andhra Pradesh. Fresh cakes, breads, sweets, pickles & hot snacks baked daily.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            chocolate: { DEFAULT: '#443025', light: '#5a4538' },
+            aloewood: { DEFAULT: '#7F5836', light: '#9a7350' },
+            milktea: { DEFAULT: '#AA7F66', light: '#c4a08a' },
+            sakura: { DEFAULT: '#EC9C9D', light: '#f4c1c2', dark: '#d87a7b' },
+            golden: { DEFAULT: '#F2CF2A', light: '#f7df6b', dark: '#d4b520' },
+            cream: { DEFAULT: '#FFF8F0', dark: '#FEF0E0', deeper: '#FDE8D0' },
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            body: ['Karla', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body { font-family: 'Karla', sans-serif; color: #443025; background: #FFF8F0; overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #FFF8F0; }
+    ::-webkit-scrollbar-thumb { background: #AA7F66; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7F5836; }
+
+    /* Scroll Animations */
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-animate="slide-left"] { transform: translateX(-40px); }
+    [data-animate="slide-right"] { transform: translateX(40px); }
+    [data-animate="scale"] { transform: scale(0.92); }
+    [data-animate="fade"] { transform: none; }
+    [data-animate].visible {
+      opacity: 1;
+      transform: translateY(0) translateX(0) scale(1);
+    }
+    [data-delay="1"] { transition-delay: 0.1s; }
+    [data-delay="2"] { transition-delay: 0.2s; }
+    [data-delay="3"] { transition-delay: 0.3s; }
+    [data-delay="4"] { transition-delay: 0.4s; }
+    [data-delay="5"] { transition-delay: 0.5s; }
+    [data-delay="6"] { transition-delay: 0.6s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      [data-animate] { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* Scroll Hero */
+    .hero-clip { will-change: clip-path; }
+    .hero-video { will-change: transform; }
+    .nav-hero-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(-16px);
+    }
+    .nav-hero-visible {
+      pointer-events: auto !important;
+      transform: translateY(0);
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(8px); opacity: 1; }
+    }
+
+    /* Navbar */
+    .nav-glass {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    .nav-scrolled {
+      background: rgba(255, 248, 240, 0.92) !important;
+      box-shadow: 0 4px 30px rgba(68, 48, 37, 0.08);
+    }
+
+    /* Menu category tabs */
+    .cat-tab {
+      transition: all 0.25s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .cat-tab.active {
+      background: #443025;
+      color: #FFF8F0;
+    }
+    .cat-tab:not(.active):hover {
+      background: #FEF0E0;
+    }
+
+    /* Menu item cards */
+    .menu-card {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(68, 48, 37, 0.12);
+    }
+
+    /* Cart sidebar */
+    .cart-overlay {
+      background: rgba(68, 48, 37, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+    .cart-drawer {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+
+    /* Mobile menu */
+    .mobile-overlay {
+      background: rgba(68, 48, 37, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .mobile-overlay.open { opacity: 1; visibility: visible; }
+    .mobile-drawer {
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-drawer.open { transform: translateX(0); }
+
+    /* Toast notification */
+    .toast {
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast.show { transform: translateX(0); }
+
+    /* Gallery hover */
+    .gallery-item .gallery-overlay {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-item img, .gallery-item .gallery-placeholder {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gallery-item:hover img,
+    .gallery-item:hover .gallery-placeholder { transform: scale(1.05); }
+
+    /* Decorative divider */
+    .section-divider {
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; max-width: 80px; height: 1px; background: #AA7F66;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .lightbox.open { opacity: 1; visibility: visible; }
+
+    /* Add to cart button pulse */
+    .add-pulse {
+      animation: pulse 0.3s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    /* Cart badge bounce */
+    .badge-bounce { animation: badgePop 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes badgePop {
+      0% { transform: scale(0.5); }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Back to top */
+    .back-to-top {
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Quantity control */
+    .qty-btn {
+      transition: background 0.2s ease;
+    }
+    .qty-btn:hover { background: #FEF0E0; }
+
+    /* Testimonial stars */
+    .star { color: #F2CF2A; }
+  </style>
+</head>
+<body class="bg-cream">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" class="fixed top-4 left-4 right-4 z-50 rounded-2xl nav-glass bg-transparent nav-hero-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="#hero" class="flex items-center gap-2 cursor-pointer group">
+          <svg class="w-8 h-8 text-chocolate group-hover:text-aloewood transition-colors" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 20c2-6 4-8 8-8s6 2 8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10 20h12v2a2 2 0 01-2 2H12a2 2 0 01-2-2v-2z" fill="currentColor" opacity="0.2"/>
+            <circle cx="16" cy="14" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="17" r="1" fill="currentColor"/>
+            <circle cx="20" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          <span class="font-display text-xl font-semibold text-chocolate">The Kurnool Bakery</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#about" class="font-body text-sm font-medium text-chocolate/70 hover:text-chocolate transition-colors cursor-pointer">About</a>
+          <a href="#menu" class="font-body text-sm font-medium text-chocolate/70 hover:text-chocolate transition-colors cursor-pointer">Menu</a>
+          <a href="#gallery" class="font-body text-sm font-medium text-chocolate/70 hover:text-chocolate transition-colors cursor-pointer">Gallery</a>
+          <a href="#contact" class="font-body text-sm font-medium text-chocolate/70 hover:text-chocolate transition-colors cursor-pointer">Contact</a>
+          <button id="cartBtnDesktop" class="relative p-2 rounded-xl hover:bg-cream-dark transition-colors cursor-pointer" aria-label="Open cart">
+            <svg class="w-6 h-6 text-chocolate" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span id="cartBadgeDesktop" class="absolute -top-1 -right-1 w-5 h-5 bg-sakura text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+          </button>
+        </div>
+
+        <!-- Mobile: Cart + Hamburger -->
+        <div class="flex items-center gap-2 md:hidden">
+          <button id="cartBtnMobile" class="relative p-2 rounded-xl hover:bg-cream-dark transition-colors cursor-pointer" aria-label="Open cart">
+            <svg class="w-6 h-6 text-chocolate" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span id="cartBadgeMobile" class="absolute -top-1 -right-1 w-5 h-5 bg-sakura text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+          </button>
+          <button id="menuToggle" class="p-2 rounded-xl hover:bg-cream-dark transition-colors cursor-pointer" aria-label="Open menu">
+            <svg class="w-6 h-6 text-chocolate" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div id="mobileOverlay" class="fixed inset-0 z-[60] mobile-overlay md:hidden">
+    <div class="absolute inset-0" id="mobileOverlayBg"></div>
+    <div id="mobileDrawer" class="mobile-drawer absolute top-0 left-0 w-72 h-full bg-cream shadow-2xl">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-10">
+          <span class="font-display text-lg font-semibold text-chocolate">Menu</span>
+          <button id="mobileClose" class="p-2 rounded-xl hover:bg-cream-dark transition-colors cursor-pointer" aria-label="Close menu">
+            <svg class="w-5 h-5 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <nav class="flex flex-col gap-4">
+          <a href="#about" class="mobile-nav-link font-body text-lg text-chocolate/80 hover:text-chocolate py-2 border-b border-milktea/20 cursor-pointer">About</a>
+          <a href="#menu" class="mobile-nav-link font-body text-lg text-chocolate/80 hover:text-chocolate py-2 border-b border-milktea/20 cursor-pointer">Menu</a>
+          <a href="#gallery" class="mobile-nav-link font-body text-lg text-chocolate/80 hover:text-chocolate py-2 border-b border-milktea/20 cursor-pointer">Gallery</a>
+          <a href="#contact" class="mobile-nav-link font-body text-lg text-chocolate/80 hover:text-chocolate py-2 border-b border-milktea/20 cursor-pointer">Contact</a>
+        </nav>
+        <div class="mt-10 p-4 bg-cream-dark rounded-xl">
+          <p class="font-body text-sm text-aloewood font-medium mb-1">Call us to order</p>
+          <a href="tel:+919876543210" class="font-display text-lg text-chocolate cursor-pointer">+91 98765 43210</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HERO (Scroll-Expand Video) ===== -->
+  <section id="hero" class="relative w-full" style="height: calc(2000px + 100vh);">
+    <div class="sticky top-0 h-screen w-full bg-black overflow-hidden">
+
+      <!-- Clipped container: video + text live inside the expanding window -->
+      <div id="heroClip" class="hero-clip absolute inset-0" style="clip-path: polygon(30% 20%, 70% 20%, 70% 80%, 30% 80%);">
+        <!-- Video background -->
+        <video id="heroVideo" autoplay muted loop playsinline preload="auto" class="hero-video absolute inset-0 w-full h-full object-cover" style="transform: scale(1.6);">
+          <source src="ElevenLabs_video_topaz-upscale_2026-06-19T08_03_14.mp4" type="video/mp4">
+        </video>
+        <!-- Dark overlay for text readability -->
+        <div class="absolute inset-0 bg-black/25"></div>
+
+        <!-- Hero text content (inside clip, scroll-controlled opacity) -->
+        <div id="heroContent" class="absolute inset-0 flex items-center justify-center" style="opacity: 0;">
+          <div class="text-center px-6 max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 mb-8">
+              <span class="w-2 h-2 rounded-full bg-golden animate-pulse"></span>
+              <span class="font-body text-sm font-medium text-white/80 tracking-wide uppercase">Est. in Kurnool, Andhra Pradesh</span>
+            </div>
+
+            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6" style="line-height: 1.1; letter-spacing: -0.02em;">
+              Freshly Baked, <br class="hidden sm:block"><span class="italic text-sakura-light">Lovingly Crafted</span>
+            </h1>
+
+            <p class="font-body text-lg sm:text-xl text-white/70 max-w-xl mx-auto mb-10 leading-relaxed">
+              From golden breads to decadent cakes, traditional sweets to spicy hot snacks — every bite tells a story of passion.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#menu" class="group inline-flex items-center gap-2 px-8 py-4 bg-sakura hover:bg-sakura-dark text-white font-body font-semibold rounded-full transition-all duration-300 cursor-pointer shadow-lg shadow-sakura/20 hover:shadow-sakura/40">
+                Explore Our Menu
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+              </a>
+              <a href="tel:+919876543210" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-body font-semibold rounded-full transition-all duration-300 border border-white/20 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+                Call to Order
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll hint (outside clip, visible on the black surround) -->
+      <div id="heroScrollHint" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10" style="animation: scrollPulse 2s ease-in-out infinite;">
+        <div class="flex flex-col items-center gap-2">
+          <span class="font-body text-[10px] text-white/50 tracking-[0.25em] uppercase">Scroll</span>
+          <svg class="w-5 h-5 text-white/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="py-24 sm:py-32 bg-cream">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <!-- Section header -->
+      <div class="text-center mb-16" data-animate>
+        <div class="section-divider mb-4">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3c-1.5 3-4 5-4 8a4 4 0 008 0c0-3-2.5-5-4-8z" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 19h8M10 22h4" stroke-linecap="round"/></svg>
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-chocolate mb-4">Our Story</h2>
+        <p class="font-body text-milktea text-lg">A tradition of taste in the heart of Kurnool</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <!-- Text -->
+        <div data-animate="slide-left">
+          <p class="font-body text-lg text-aloewood leading-relaxed mb-6">
+            What started as a small family kitchen has grown into Kurnool's beloved bakery. Every morning before dawn, our bakers begin crafting the breads, cakes, and sweets that our community has come to love.
+          </p>
+          <p class="font-body text-lg text-aloewood leading-relaxed mb-8">
+            We source the finest ingredients — real butter, farm-fresh eggs, pure ghee, and seasonal fruits — because we believe great baking begins with honest materials. From our classic Andhra sweets and tangy pickles to our rich chocolate cakes, every item is made with the same care you'd put into feeding your own family.
+          </p>
+          <div class="flex flex-wrap gap-8">
+            <div>
+              <p class="font-display text-3xl font-bold text-chocolate">1000+</p>
+              <p class="font-body text-sm text-milktea mt-1">Happy Customers</p>
+            </div>
+            <div>
+              <p class="font-display text-3xl font-bold text-chocolate">50+</p>
+              <p class="font-body text-sm text-milktea mt-1">Baked Items</p>
+            </div>
+            <div>
+              <p class="font-display text-3xl font-bold text-chocolate">Daily</p>
+              <p class="font-body text-sm text-milktea mt-1">Fresh Baked</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image placeholder -->
+        <div data-animate="slide-right" class="relative">
+          <div class="aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-br from-milktea/30 via-cream-dark to-sakura/20 border border-milktea/10 flex items-center justify-center">
+            <div class="text-center px-8">
+              <svg class="w-20 h-20 text-milktea/40 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <p class="font-body text-sm text-milktea/60">Add your bakery photo here</p>
+              <p class="font-body text-xs text-milktea/40 mt-1">Replace this div with an &lt;img&gt; tag</p>
+            </div>
+          </div>
+          <!-- Decorative badge -->
+          <div class="absolute -bottom-4 -left-4 sm:-left-6 bg-chocolate text-cream px-6 py-3 rounded-2xl shadow-xl">
+            <p class="font-display text-sm font-semibold">Made with Love</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <section id="menu" class="py-24 sm:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <!-- Section header -->
+      <div class="text-center mb-12" data-animate>
+        <div class="section-divider mb-4">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8V4m0 4c-2 0-6 1-6 4v1h12v-1c0-3-4-4-6-4z" stroke-linecap="round"/><rect x="5" y="13" width="14" height="3" rx="1"/><path d="M7 16v2m10-2v2M9 18h6" stroke-linecap="round"/></svg>
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-chocolate mb-4">Our Menu</h2>
+        <p class="font-body text-milktea text-lg max-w-xl mx-auto">Add your favorites to the cart and call us to place your order</p>
+      </div>
+
+      <!-- Category tabs -->
+      <div class="flex justify-center mb-12 overflow-x-auto pb-2 scrollbar-hide" data-animate data-delay="1">
+        <div class="inline-flex gap-2 p-1.5 bg-cream rounded-full">
+          <button class="cat-tab active px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate" data-category="all">All Items</button>
+          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="cakes">Cakes & Pastries</button>
+          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="breads">Breads</button>
+          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="sweets">Sweets & Pickles</button>
+          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="hot">Hot Items</button>
+        </div>
+      </div>
+
+      <!-- Menu grid (rendered by JS) -->
+      <div id="menuGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Items injected here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section id="gallery" class="py-24 sm:py-32 bg-cream">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16" data-animate>
+        <div class="section-divider mb-4">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-chocolate mb-4">From Our Oven</h2>
+        <p class="font-body text-milktea text-lg">A peek inside our kitchen and our creations</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer col-span-2 row-span-2" data-animate data-delay="1">
+          <div class="gallery-placeholder aspect-square bg-gradient-to-br from-aloewood/20 via-milktea/10 to-sakura/10 flex items-center justify-center">
+            <div class="text-center">
+              <svg class="w-12 h-12 text-milktea/30 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <p class="font-body text-xs text-milktea/40">Featured photo</p>
+            </div>
+          </div>
+          <div class="gallery-overlay absolute inset-0 bg-chocolate/40 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+          </div>
+        </div>
+        <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer" data-animate data-delay="2">
+          <div class="gallery-placeholder aspect-square bg-gradient-to-br from-sakura/20 to-golden/10 flex items-center justify-center">
+            <p class="font-body text-xs text-milktea/40">Photo 2</p>
+          </div>
+          <div class="gallery-overlay absolute inset-0 bg-chocolate/40 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+          </div>
+        </div>
+        <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer" data-animate data-delay="3">
+          <div class="gallery-placeholder aspect-square bg-gradient-to-br from-golden/15 to-milktea/10 flex items-center justify-center">
+            <p class="font-body text-xs text-milktea/40">Photo 3</p>
+          </div>
+          <div class="gallery-overlay absolute inset-0 bg-chocolate/40 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+          </div>
+        </div>
+        <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer" data-animate data-delay="2">
+          <div class="gallery-placeholder aspect-square bg-gradient-to-br from-milktea/20 to-cream-dark flex items-center justify-center">
+            <p class="font-body text-xs text-milktea/40">Photo 4</p>
+          </div>
+          <div class="gallery-overlay absolute inset-0 bg-chocolate/40 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+          </div>
+        </div>
+        <div class="gallery-item relative rounded-2xl overflow-hidden cursor-pointer col-span-2" data-animate data-delay="3">
+          <div class="gallery-placeholder aspect-video bg-gradient-to-br from-aloewood/15 via-sakura/10 to-golden/10 flex items-center justify-center">
+            <p class="font-body text-xs text-milktea/40">Wide photo</p>
+          </div>
+          <div class="gallery-overlay absolute inset-0 bg-chocolate/40 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section id="testimonials" class="py-24 sm:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16" data-animate>
+        <div class="section-divider mb-4">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-chocolate mb-4">What People Say</h2>
+        <p class="font-body text-milktea text-lg">Loved by families across Kurnool</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-cream rounded-3xl p-8 border border-milktea/10" data-animate data-delay="1">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="font-body text-aloewood leading-relaxed mb-6">"The best Black Forest cake in Kurnool! We order from here for every birthday in our family. Always fresh and perfectly sweet."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-sakura/20 flex items-center justify-center">
+              <span class="font-display font-bold text-sakura text-sm">PS</span>
+            </div>
+            <div>
+              <p class="font-body font-semibold text-chocolate text-sm">Priya Sharma</p>
+              <p class="font-body text-xs text-milktea">Regular Customer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="bg-cream rounded-3xl p-8 border border-milktea/10" data-animate data-delay="2">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="font-body text-aloewood leading-relaxed mb-6">"Their chicken puffs are unbeatable — crispy outside, juicy inside. I stop by every morning before work. The bread is always so soft and fresh too."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-golden/20 flex items-center justify-center">
+              <span class="font-display font-bold text-golden-dark text-sm">RK</span>
+            </div>
+            <div>
+              <p class="font-body font-semibold text-chocolate text-sm">Ravi Kumar</p>
+              <p class="font-body text-xs text-milktea">Daily Visitor</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="bg-cream rounded-3xl p-8 border border-milktea/10" data-animate data-delay="3">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="font-body text-aloewood leading-relaxed mb-6">"We ordered sweets for Diwali and the Kaju Katli was as good as any famous sweet shop. The avakaya pickle is pure Andhra authenticity!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-aloewood/15 flex items-center justify-center">
+              <span class="font-display font-bold text-aloewood text-sm">AL</span>
+            </div>
+            <div>
+              <p class="font-body font-semibold text-chocolate text-sm">Anitha Lakshmi</p>
+              <p class="font-body text-xs text-milktea">Festival Customer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="py-24 sm:py-32 bg-chocolate text-cream relative overflow-hidden">
+    <!-- Decorative -->
+    <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-aloewood/20 blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-sakura/10 blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16" data-animate>
+        <div class="section-divider mb-4">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-cream mb-4">Visit Us</h2>
+        <p class="font-body text-milktea text-lg">We're right here in Kurnool, ready to serve you</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <!-- Address -->
+        <div class="text-center md:text-left" data-animate data-delay="1">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-aloewood/20 mb-4">
+            <svg class="w-6 h-6 text-sakura" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-cream mb-2">Address</h3>
+          <p class="font-body text-milktea-light leading-relaxed">Main Road, Kurnool<br>Andhra Pradesh 518001</p>
+        </div>
+
+        <!-- Phone -->
+        <div class="text-center md:text-left" data-animate data-delay="2">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-aloewood/20 mb-4">
+            <svg class="w-6 h-6 text-sakura" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-cream mb-2">Phone</h3>
+          <a href="tel:+919876543210" class="font-body text-milktea-light hover:text-sakura transition-colors cursor-pointer">+91 98765 43210</a>
+          <p class="font-body text-milktea/60 text-sm mt-1">Call us to place your order</p>
+        </div>
+
+        <!-- Hours -->
+        <div class="text-center md:text-left" data-animate data-delay="3">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-aloewood/20 mb-4">
+            <svg class="w-6 h-6 text-sakura" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold text-cream mb-2">Hours</h3>
+          <p class="font-body text-milktea-light">Mon — Sat: 7:00 AM — 9:00 PM</p>
+          <p class="font-body text-milktea-light">Sunday: 8:00 AM — 8:00 PM</p>
+        </div>
+      </div>
+
+      <!-- Map placeholder -->
+      <div class="mt-16 rounded-3xl overflow-hidden border border-aloewood/20 aspect-[21/9] bg-chocolate-light/30 flex items-center justify-center" data-animate>
+        <div class="text-center px-8">
+          <svg class="w-12 h-12 text-milktea/30 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/></svg>
+          <p class="font-body text-sm text-milktea/50">Embed your Google Map here</p>
+          <p class="font-body text-xs text-milktea/30 mt-1">Replace with an &lt;iframe&gt; from Google Maps</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-chocolate border-t border-aloewood/20 py-12">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6 text-milktea" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 20c2-6 4-8 8-8s6 2 8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="16" cy="14" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="font-display text-lg text-cream">The Kurnool Bakery</span>
+        </div>
+        <p class="font-body text-sm text-milktea/60">&copy; 2025 The Kurnool Bakery. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="text-milktea/60 hover:text-sakura transition-colors cursor-pointer" aria-label="Instagram">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" class="text-milktea/60 hover:text-sakura transition-colors cursor-pointer" aria-label="Facebook">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" class="text-milktea/60 hover:text-sakura transition-colors cursor-pointer" aria-label="WhatsApp">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== CART SIDEBAR ===== -->
+  <div id="cartOverlay" class="cart-overlay fixed inset-0 z-[70]">
+    <div class="absolute inset-0" id="cartOverlayBg"></div>
+    <div id="cartDrawer" class="cart-drawer fixed top-0 right-0 w-full max-w-md h-full bg-cream shadow-2xl flex flex-col">
+      <!-- Cart header -->
+      <div class="flex items-center justify-between p-6 border-b border-milktea/10">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-chocolate" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+          <h3 class="font-display text-xl font-semibold text-chocolate">Your Picks</h3>
+          <span id="cartCountLabel" class="text-sm text-milktea font-body">(0 items)</span>
+        </div>
+        <button id="cartClose" class="p-2 rounded-xl hover:bg-cream-dark transition-colors cursor-pointer" aria-label="Close cart">
+          <svg class="w-5 h-5 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Cart items -->
+      <div id="cartItems" class="flex-1 overflow-y-auto p-6">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Cart footer -->
+      <div id="cartFooter" class="border-t border-milktea/10 p-6 hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-body text-sm text-milktea">Subtotal</span>
+          <span id="cartSubtotal" class="font-display text-2xl font-bold text-chocolate">&#8377;0</span>
+        </div>
+        <p class="font-body text-xs text-milktea/60 mb-4">This is a reference list. Call us to place your order.</p>
+        <a id="callToOrder" href="tel:+919876543210" class="flex items-center justify-center gap-2 w-full py-4 bg-sakura hover:bg-sakura-dark text-white font-body font-semibold rounded-2xl transition-colors cursor-pointer mb-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+          Call to Order
+        </a>
+        <button id="whatsappOrder" class="flex items-center justify-center gap-2 w-full py-4 bg-[#25D366] hover:bg-[#1fb855] text-white font-body font-semibold rounded-2xl transition-colors cursor-pointer">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Order
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast fixed bottom-6 right-6 z-[80] bg-chocolate text-cream px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 max-w-xs">
+    <svg class="w-5 h-5 text-sakura flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+    <span id="toastMsg" class="font-body text-sm">Added to cart</span>
+  </div>
+
+  <!-- ===== BACK TO TOP ===== -->
+  <button id="backToTop" class="back-to-top fixed bottom-6 left-6 z-[60] w-12 h-12 rounded-full bg-chocolate text-cream shadow-lg flex items-center justify-center cursor-pointer hover:bg-aloewood transition-colors" aria-label="Back to top">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+  </button>
+
+  <script>
+    // ===== MENU DATA =====
+    const menuItems = [
+      // Cakes & Pastries
+      { id: 1, name: 'Black Forest Cake', category: 'cakes', description: 'Rich chocolate layers with cherry filling', price: 450, unit: '500g', color: 'from-chocolate/20 to-sakura/10' },
+      { id: 2, name: 'Butterscotch Cake', category: 'cakes', description: 'Creamy caramel with crunchy praline', price: 400, unit: '500g', color: 'from-golden/20 to-milktea/10' },
+      { id: 3, name: 'Red Velvet Cake', category: 'cakes', description: 'Velvety cocoa layers with cream cheese', price: 550, unit: '500g', color: 'from-sakura/20 to-sakura/5' },
+      { id: 4, name: 'Pineapple Pastry', category: 'cakes', description: 'Light sponge with tropical pineapple', price: 45, unit: 'piece', color: 'from-golden/15 to-cream-dark' },
+      { id: 5, name: 'Chocolate Truffle', category: 'cakes', description: 'Decadent dark chocolate ganache', price: 500, unit: '500g', color: 'from-chocolate/25 to-aloewood/10' },
+      { id: 6, name: 'Cupcake Box', category: 'cakes', description: 'Assorted flavors with buttercream', price: 240, unit: '6 pcs', color: 'from-sakura/15 to-golden/10' },
+
+      // Breads
+      { id: 7, name: 'Whole Wheat Bread', category: 'breads', description: 'Hearty and wholesome daily bread', price: 50, unit: 'loaf', color: 'from-aloewood/15 to-milktea/5' },
+      { id: 8, name: 'Milk Bread', category: 'breads', description: 'Soft, pillowy white bread', price: 45, unit: 'loaf', color: 'from-cream-dark to-milktea/5' },
+      { id: 9, name: 'Garlic Bread', category: 'breads', description: 'Crispy with fragrant herb butter', price: 80, unit: '4 pcs', color: 'from-golden/15 to-aloewood/5' },
+      { id: 10, name: 'Butter Buns', category: 'breads', description: 'Golden, soft dinner rolls', price: 40, unit: '4 pcs', color: 'from-golden/20 to-cream-dark' },
+      { id: 11, name: 'Multigrain Bread', category: 'breads', description: 'Five grain health loaf', price: 60, unit: 'loaf', color: 'from-milktea/15 to-aloewood/5' },
+      { id: 12, name: 'Pizza Base', category: 'breads', description: 'Ready to top and bake at home', price: 70, unit: '2 pcs', color: 'from-sakura/10 to-golden/10' },
+
+      // Sweets & Pickles
+      { id: 13, name: 'Kaju Katli', category: 'sweets', description: 'Premium cashew diamond cuts', price: 280, unit: '250g', color: 'from-golden/25 to-golden/5' },
+      { id: 14, name: 'Mysore Pak', category: 'sweets', description: 'Traditional ghee-rich sweet', price: 200, unit: '250g', color: 'from-golden/20 to-aloewood/5' },
+      { id: 15, name: 'Gulab Jamun', category: 'sweets', description: 'Soft dumplings in rose syrup', price: 250, unit: '1 kg', color: 'from-sakura/20 to-golden/5' },
+      { id: 16, name: 'Mango Pickle', category: 'sweets', description: 'Tangy Andhra-style avakaya', price: 120, unit: '500g', color: 'from-golden/20 to-sakura/5' },
+      { id: 17, name: 'Lemon Pickle', category: 'sweets', description: 'Zesty citrus with mustard seeds', price: 100, unit: '500g', color: 'from-golden/15 to-cream-dark' },
+      { id: 18, name: 'Dry Fruit Laddu', category: 'sweets', description: 'Dates, nuts and jaggery', price: 300, unit: '250g', color: 'from-aloewood/20 to-milktea/5' },
+
+      // Hot Items
+      { id: 19, name: 'Chicken Puff', category: 'hot', description: 'Flaky pastry with spiced chicken', price: 40, unit: 'piece', color: 'from-aloewood/20 to-golden/5' },
+      { id: 20, name: 'Egg Puff', category: 'hot', description: 'Golden puff with masala egg', price: 30, unit: 'piece', color: 'from-golden/15 to-milktea/5' },
+      { id: 21, name: 'Veg Samosa', category: 'hot', description: 'Crispy with spiced potato filling', price: 20, unit: '2 pcs', color: 'from-milktea/20 to-golden/5' },
+      { id: 22, name: 'Paneer Puff', category: 'hot', description: 'Buttery pastry with cottage cheese', price: 35, unit: 'piece', color: 'from-sakura/10 to-golden/10' },
+      { id: 23, name: 'Bread Omelette', category: 'hot', description: 'Toasted bread with fluffy masala eggs', price: 50, unit: 'plate', color: 'from-golden/20 to-aloewood/5' },
+      { id: 24, name: 'Veg Sandwich', category: 'hot', description: 'Fresh veggies with mint chutney', price: 60, unit: 'plate', color: 'from-milktea/10 to-sakura/5' },
+    ];
+
+    // ===== CART STATE =====
+    let cart = JSON.parse(localStorage.getItem('bakeryCart') || '[]');
+
+    function saveCart() {
+      localStorage.setItem('bakeryCart', JSON.stringify(cart));
+    }
+
+    function getCartTotal() {
+      return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    function getCartCount() {
+      return cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    // ===== RENDER MENU =====
+    const menuGrid = document.getElementById('menuGrid');
+
+    function renderMenu(category = 'all') {
+      const items = category === 'all' ? menuItems : menuItems.filter(i => i.category === category);
+      menuGrid.innerHTML = items.map((item, idx) => {
+        const inCart = cart.find(c => c.id === item.id);
+        return `
+          <div class="menu-card bg-white rounded-3xl overflow-hidden border border-milktea/10 shadow-sm" data-animate data-delay="${(idx % 3) + 1}" data-id="${item.id}">
+            <div class="aspect-[4/3] bg-gradient-to-br ${item.color} flex items-center justify-center relative overflow-hidden">
+              <div class="text-center">
+                <span class="font-display text-4xl font-bold text-chocolate/15">${item.name.charAt(0)}</span>
+              </div>
+              <div class="absolute top-3 right-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full">
+                <span class="font-body text-xs font-medium text-aloewood">${item.unit}</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-display text-lg font-semibold text-chocolate mb-1">${item.name}</h3>
+              <p class="font-body text-sm text-milktea mb-4">${item.description}</p>
+              <div class="flex items-center justify-between">
+                <span class="font-display text-xl font-bold text-chocolate">&#8377;${item.price}</span>
+                ${inCart ? `
+                  <div class="flex items-center gap-2">
+                    <button onclick="updateQty(${item.id}, -1)" class="qty-btn w-8 h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Decrease quantity">
+                      <svg class="w-4 h-4 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 12h14"/></svg>
+                    </button>
+                    <span class="font-body font-semibold text-chocolate w-6 text-center">${inCart.qty}</span>
+                    <button onclick="updateQty(${item.id}, 1)" class="qty-btn w-8 h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Increase quantity">
+                      <svg class="w-4 h-4 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+                    </button>
+                  </div>
+                ` : `
+                  <button onclick="addToCart(${item.id})" class="add-btn flex items-center gap-2 px-4 py-2.5 bg-chocolate hover:bg-aloewood text-cream font-body text-sm font-medium rounded-xl transition-colors cursor-pointer" aria-label="Add ${item.name} to cart">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+                    Add
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      initScrollAnimations();
+    }
+
+    // ===== CART ACTIONS =====
+    function addToCart(id) {
+      const item = menuItems.find(i => i.id === id);
+      if (!item) return;
+      const existing = cart.find(c => c.id === id);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id: item.id, name: item.name, price: item.price, unit: item.unit, qty: 1 });
+      }
+      saveCart();
+      updateCartUI();
+      renderMenu(currentCategory);
+      showToast(`${item.name} added`);
+    }
+
+    function updateQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(c => c.id !== id);
+      }
+      saveCart();
+      updateCartUI();
+      renderMenu(currentCategory);
+    }
+
+    function removeFromCart(id) {
+      const item = cart.find(c => c.id === id);
+      cart = cart.filter(c => c.id !== id);
+      saveCart();
+      updateCartUI();
+      renderMenu(currentCategory);
+      if (item) showToast(`${item.name} removed`);
+    }
+
+    // ===== RENDER CART =====
+    function updateCartUI() {
+      const count = getCartCount();
+      const total = getCartTotal();
+
+      // Badges
+      [document.getElementById('cartBadgeDesktop'), document.getElementById('cartBadgeMobile')].forEach(badge => {
+        if (count > 0) {
+          badge.textContent = count;
+          badge.classList.remove('hidden');
+          badge.classList.add('badge-bounce');
+          setTimeout(() => badge.classList.remove('badge-bounce'), 350);
+        } else {
+          badge.classList.add('hidden');
+        }
+      });
+
+      // Cart count label
+      document.getElementById('cartCountLabel').textContent = `(${count} item${count !== 1 ? 's' : ''})`;
+
+      // Cart items
+      const cartItemsEl = document.getElementById('cartItems');
+      const cartFooter = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full text-center py-20">
+            <svg class="w-16 h-16 text-milktea/30 mb-4" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <p class="font-display text-lg text-chocolate/40 mb-1">Your cart is empty</p>
+            <p class="font-body text-sm text-milktea/50">Browse the menu and add your favorites</p>
+          </div>
+        `;
+        cartFooter.classList.add('hidden');
+      } else {
+        cartItemsEl.innerHTML = cart.map(item => `
+          <div class="flex items-start gap-4 py-4 border-b border-milktea/10 last:border-0">
+            <div class="flex-1">
+              <h4 class="font-display font-semibold text-chocolate text-sm">${item.name}</h4>
+              <p class="font-body text-xs text-milktea mt-0.5">${item.unit} &middot; &#8377;${item.price} each</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateQty(${item.id}, -1)" class="qty-btn w-7 h-7 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Decrease">
+                <svg class="w-3.5 h-3.5 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 12h14"/></svg>
+              </button>
+              <span class="font-body font-semibold text-chocolate text-sm w-5 text-center">${item.qty}</span>
+              <button onclick="updateQty(${item.id}, 1)" class="qty-btn w-7 h-7 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Increase">
+                <svg class="w-3.5 h-3.5 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              </button>
+            </div>
+            <div class="text-right flex flex-col items-end gap-1">
+              <span class="font-display font-bold text-chocolate text-sm">&#8377;${item.price * item.qty}</span>
+              <button onclick="removeFromCart(${item.id})" class="text-sakura hover:text-sakura-dark transition-colors cursor-pointer" aria-label="Remove">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+        cartFooter.classList.remove('hidden');
+        document.getElementById('cartSubtotal').innerHTML = `&#8377;${total}`;
+      }
+    }
+
+    // ===== TOAST =====
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ===== CART TOGGLE =====
+    function openCart() {
+      document.getElementById('cartOverlay').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCart() {
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('cartBtnDesktop').addEventListener('click', openCart);
+    document.getElementById('cartBtnMobile').addEventListener('click', openCart);
+    document.getElementById('cartClose').addEventListener('click', closeCart);
+    document.getElementById('cartOverlayBg').addEventListener('click', closeCart);
+
+    // ===== WHATSAPP ORDER =====
+    document.getElementById('whatsappOrder').addEventListener('click', () => {
+      let msg = 'Hi! I would like to order:\n\n';
+      cart.forEach(item => {
+        msg += `- ${item.name} (${item.unit}) x${item.qty} = ₹${item.price * item.qty}\n`;
+      });
+      msg += `\nTotal: ₹${getCartTotal()}\n\nPlease confirm availability. Thank you!`;
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://wa.me/919876543210?text=${encoded}`, '_blank');
+    });
+
+    // ===== CATEGORY FILTER =====
+    let currentCategory = 'all';
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.dataset.category;
+        renderMenu(currentCategory);
+      });
+    });
+
+    // ===== MOBILE MENU =====
+    function openMobileMenu() {
+      document.getElementById('mobileOverlay').classList.add('open');
+      document.getElementById('mobileDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileOverlay').classList.remove('open');
+      document.getElementById('mobileDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('menuToggle').addEventListener('click', openMobileMenu);
+    document.getElementById('mobileClose').addEventListener('click', closeMobileMenu);
+    document.getElementById('mobileOverlayBg').addEventListener('click', closeMobileMenu);
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // ===== SCROLL HERO CONTROLLER =====
+    const navbar = document.getElementById('navbar');
+    const heroSection = document.getElementById('hero');
+    const heroClip = document.getElementById('heroClip');
+    const heroVideo = document.getElementById('heroVideo');
+    const heroContent = document.getElementById('heroContent');
+    const heroScrollHint = document.getElementById('heroScrollHint');
+    const HERO_SCROLL_HEIGHT = 2000;
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeOutQuad(t) { return 1 - Math.pow(1 - t, 2); }
+
+    function updateHeroScroll() {
+      const rect = heroSection.getBoundingClientRect();
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / HERO_SCROLL_HEIGHT);
+
+      // --- Phase 1: Video clip expansion (0% → 80% of scroll) ---
+      const clipRaw = Math.min(1, progress / 0.8);
+      const clipEased = easeOutCubic(clipRaw);
+
+      const startX = 30, startY = 20;
+      const x1 = startX * (1 - clipEased);
+      const y1 = startY * (1 - clipEased);
+      const x2 = (100 - startX) + startX * clipEased;
+      const y2 = (100 - startY) + startY * clipEased;
+      heroClip.style.clipPath = `polygon(${x1}% ${y1}%, ${x2}% ${y1}%, ${x2}% ${y2}%, ${x1}% ${y2}%)`;
+
+      // Video zoom-out: 1.6x → 1.0x
+      heroVideo.style.transform = `scale(${1.6 - 0.6 * clipEased})`;
+
+      // --- Phase 1b: Text fades in WITH clip (delayed start at 30% of clip) ---
+      const textRaw = Math.max(0, (clipRaw - 0.3) / 0.7);
+      heroContent.style.opacity = easeOutQuad(Math.min(1, textRaw));
+
+      // Scroll hint fades out immediately
+      if (heroScrollHint) {
+        heroScrollHint.style.opacity = Math.max(0, 1 - progress * 6);
+        if (progress > 0.15) heroScrollHint.style.pointerEvents = 'none';
+      }
+
+      // --- Phase 2: Navbar appears AFTER video fully expanded (80% → 95%) ---
+      const navRaw = Math.max(0, Math.min(1, (progress - 0.8) / 0.15));
+
+      if (navRaw > 0) {
+        navbar.classList.remove('nav-hero-hidden');
+        navbar.classList.add('nav-hero-visible');
+        navbar.style.opacity = easeOutQuad(navRaw);
+      } else {
+        navbar.classList.add('nav-hero-hidden');
+        navbar.classList.remove('nav-hero-visible');
+        navbar.style.opacity = '0';
+      }
+
+      // --- After hero unpins: normal navbar behavior ---
+      if (scrolled >= HERO_SCROLL_HEIGHT) {
+        navbar.style.opacity = '';
+        navbar.classList.remove('nav-hero-hidden');
+        navbar.classList.add('nav-hero-visible');
+        if (window.scrollY > HERO_SCROLL_HEIGHT + 100) {
+          navbar.classList.add('nav-scrolled');
+        } else {
+          navbar.classList.remove('nav-scrolled');
+        }
+      } else {
+        navbar.classList.remove('nav-scrolled');
+      }
+    }
+
+    // Reduced motion: skip scroll hero, show everything immediately
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      heroClip.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+      heroVideo.style.transform = 'scale(1)';
+      heroContent.style.opacity = '1';
+      if (heroScrollHint) heroScrollHint.style.display = 'none';
+      navbar.classList.remove('nav-hero-hidden');
+      navbar.classList.add('nav-hero-visible');
+      navbar.style.opacity = '';
+      heroSection.style.height = '100vh';
+    } else {
+      window.addEventListener('scroll', () => requestAnimationFrame(updateHeroScroll), { passive: true });
+      updateHeroScroll();
+    }
+
+    // ===== BACK TO TOP =====
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    }, { passive: true });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ===== SCROLL ANIMATIONS =====
+    function initScrollAnimations() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        document.querySelectorAll('[data-animate]').forEach(el => el.classList.add('visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('[data-animate]:not(.visible)').forEach(el => observer.observe(el));
+    }
+
+    // ===== INIT =====
+    renderMenu();
+    updateCartUI();
+    initScrollAnimations();
+
+    // Smooth scroll offset for fixed navbar
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const id = this.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          const offset = 100;
+          const pos = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: pos, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Keyboard: Escape to close overlays
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCart();
+        closeMobileMenu();
+      }
+    });
+  </script>
+</body>
+</html>

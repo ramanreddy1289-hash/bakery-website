@@ -218,6 +218,32 @@
 
     /* Testimonial stars */
     .star { color: #F2CF2A; }
+
+    /* Hide scrollbar on category tabs */
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+    /* iOS safe area */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+    }
+
+    /* Mobile viewport fix */
+    .h-dvh { height: 100vh; height: 100dvh; }
+
+    /* Mobile touch targets */
+    @media (max-width: 640px) {
+      .qty-btn { min-width: 44px; min-height: 44px; }
+      .menu-card:hover { transform: none; box-shadow: 0 4px 20px rgba(68, 48, 37, 0.08); }
+    }
+
+    /* Video fallback poster */
+    .video-tap-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; background: transparent;
+    }
+    .video-tap-overlay.hidden { display: none; }
   </style>
 </head>
 <body class="bg-cream">
@@ -291,15 +317,17 @@
   </div>
 
   <!-- ===== HERO (Scroll-Expand Video) ===== -->
-  <section id="hero" class="relative w-full" style="height: calc(2000px + 100vh);">
-    <div class="sticky top-0 h-screen w-full bg-black overflow-hidden">
+  <section id="hero" class="relative w-full">
+    <div class="sticky top-0 w-full bg-black overflow-hidden h-dvh">
 
       <!-- Clipped container: video + text live inside the expanding window -->
-      <div id="heroClip" class="hero-clip absolute inset-0" style="clip-path: polygon(30% 20%, 70% 20%, 70% 80%, 30% 80%);">
+      <div id="heroClip" class="hero-clip absolute inset-0" style="clip-path: polygon(25% 18%, 75% 18%, 75% 82%, 25% 82%);">
         <!-- Video background -->
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto" class="hero-video absolute inset-0 w-full h-full object-cover" style="transform: scale(1.6);">
+        <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="auto" class="hero-video absolute inset-0 w-full h-full object-cover" style="transform: scale(1.6);">
           <source src="ElevenLabs_video_topaz-upscale_2026-06-19T08_03_14.mp4" type="video/mp4">
         </video>
+        <!-- Tap-to-play fallback for mobile (hidden once video plays) -->
+        <div id="videoTapOverlay" class="video-tap-overlay hidden" aria-label="Tap to play video"></div>
         <!-- Dark overlay for text readability -->
         <div class="absolute inset-0 bg-black/25"></div>
 
@@ -311,20 +339,20 @@
               <span class="font-body text-sm font-medium text-white/80 tracking-wide uppercase">Est. in Kurnool, Andhra Pradesh</span>
             </div>
 
-            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6" style="line-height: 1.1; letter-spacing: -0.02em;">
-              Freshly Baked, <br class="hidden sm:block"><span class="italic text-sakura-light">Lovingly Crafted</span>
+            <h1 class="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 sm:mb-6" style="line-height: 1.1; letter-spacing: -0.02em;">
+              Freshly Baked, <br><span class="italic text-sakura-light">Lovingly Crafted</span>
             </h1>
 
-            <p class="font-body text-lg sm:text-xl text-white/70 max-w-xl mx-auto mb-10 leading-relaxed">
+            <p class="font-body text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed">
               From golden breads to decadent cakes, traditional sweets to spicy hot snacks — every bite tells a story of passion.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="#menu" class="group inline-flex items-center gap-2 px-8 py-4 bg-sakura hover:bg-sakura-dark text-white font-body font-semibold rounded-full transition-all duration-300 cursor-pointer shadow-lg shadow-sakura/20 hover:shadow-sakura/40">
+              <a href="#menu" class="group inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-sakura hover:bg-sakura-dark text-white font-body text-sm sm:text-base font-semibold rounded-full transition-all duration-300 cursor-pointer shadow-lg shadow-sakura/20 hover:shadow-sakura/40">
                 Explore Our Menu
                 <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
               </a>
-              <a href="tel:+919876543210" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-body font-semibold rounded-full transition-all duration-300 border border-white/20 cursor-pointer">
+              <a href="tel:+919876543210" class="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-white/10 hover:bg-white/20 text-white font-body text-sm sm:text-base font-semibold rounded-full transition-all duration-300 border border-white/20 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
                 Call to Order
               </a>
@@ -411,13 +439,13 @@
       </div>
 
       <!-- Category tabs -->
-      <div class="flex justify-center mb-12 overflow-x-auto pb-2 scrollbar-hide" data-animate data-delay="1">
-        <div class="inline-flex gap-2 p-1.5 bg-cream rounded-full">
-          <button class="cat-tab active px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate" data-category="all">All Items</button>
-          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="cakes">Cakes & Pastries</button>
-          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="breads">Breads</button>
-          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="sweets">Sweets & Pickles</button>
-          <button class="cat-tab px-5 py-2.5 rounded-full font-body text-sm font-medium text-chocolate/60" data-category="hot">Hot Items</button>
+      <div class="flex mb-12 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6 sm:mx-0 sm:px-0 sm:justify-center" data-animate data-delay="1">
+        <div class="inline-flex gap-1.5 sm:gap-2 p-1.5 bg-cream rounded-full">
+          <button class="cat-tab active px-4 py-2.5 sm:px-5 rounded-full font-body text-xs sm:text-sm font-medium text-chocolate" data-category="all">All</button>
+          <button class="cat-tab px-4 py-2.5 sm:px-5 rounded-full font-body text-xs sm:text-sm font-medium text-chocolate/60" data-category="cakes">Cakes</button>
+          <button class="cat-tab px-4 py-2.5 sm:px-5 rounded-full font-body text-xs sm:text-sm font-medium text-chocolate/60" data-category="breads">Breads</button>
+          <button class="cat-tab px-4 py-2.5 sm:px-5 rounded-full font-body text-xs sm:text-sm font-medium text-chocolate/60" data-category="sweets">Sweets</button>
+          <button class="cat-tab px-4 py-2.5 sm:px-5 rounded-full font-body text-xs sm:text-sm font-medium text-chocolate/60" data-category="hot">Hot Items</button>
         </div>
       </div>
 
@@ -612,7 +640,7 @@
       </div>
 
       <!-- Map placeholder -->
-      <div class="mt-16 rounded-3xl overflow-hidden border border-aloewood/20 aspect-[21/9] bg-chocolate-light/30 flex items-center justify-center" data-animate>
+      <div class="mt-16 rounded-3xl overflow-hidden border border-aloewood/20 aspect-[4/3] sm:aspect-[21/9] bg-chocolate-light/30 flex items-center justify-center" data-animate>
         <div class="text-center px-8">
           <svg class="w-12 h-12 text-milktea/30 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/></svg>
           <p class="font-body text-sm text-milktea/50">Embed your Google Map here</p>
@@ -672,7 +700,7 @@
       </div>
 
       <!-- Cart footer -->
-      <div id="cartFooter" class="border-t border-milktea/10 p-6 hidden">
+      <div id="cartFooter" class="border-t border-milktea/10 p-6 safe-bottom hidden">
         <div class="flex items-center justify-between mb-2">
           <span class="font-body text-sm text-milktea">Subtotal</span>
           <span id="cartSubtotal" class="font-display text-2xl font-bold text-chocolate">&#8377;0</span>
@@ -775,12 +803,12 @@
               <div class="flex items-center justify-between">
                 <span class="font-display text-xl font-bold text-chocolate">&#8377;${item.price}</span>
                 ${inCart ? `
-                  <div class="flex items-center gap-2">
-                    <button onclick="updateQty(${item.id}, -1)" class="qty-btn w-8 h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Decrease quantity">
+                  <div class="flex items-center gap-1">
+                    <button onclick="updateQty(${item.id}, -1)" class="qty-btn w-10 h-10 sm:w-8 sm:h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Decrease quantity">
                       <svg class="w-4 h-4 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M5 12h14"/></svg>
                     </button>
-                    <span class="font-body font-semibold text-chocolate w-6 text-center">${inCart.qty}</span>
-                    <button onclick="updateQty(${item.id}, 1)" class="qty-btn w-8 h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Increase quantity">
+                    <span class="font-body font-semibold text-chocolate w-8 text-center">${inCart.qty}</span>
+                    <button onclick="updateQty(${item.id}, 1)" class="qty-btn w-10 h-10 sm:w-8 sm:h-8 rounded-lg border border-milktea/20 flex items-center justify-center cursor-pointer" aria-label="Increase quantity">
                       <svg class="w-4 h-4 text-chocolate" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
                     </button>
                   </div>
@@ -966,14 +994,48 @@
       link.addEventListener('click', closeMobileMenu);
     });
 
+    // ===== MOBILE VIDEO AUTOPLAY FIX =====
+    const heroVideoEl = document.getElementById('heroVideo');
+    const videoTapOverlay = document.getElementById('videoTapOverlay');
+
+    function tryPlayVideo() {
+      if (!heroVideoEl) return;
+      const playPromise = heroVideoEl.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          videoTapOverlay.classList.add('hidden');
+        }).catch(() => {
+          videoTapOverlay.classList.remove('hidden');
+        });
+      }
+    }
+
+    heroVideoEl.addEventListener('loadeddata', tryPlayVideo);
+    if (heroVideoEl.readyState >= 2) tryPlayVideo();
+
+    videoTapOverlay.addEventListener('click', () => {
+      heroVideoEl.play();
+      videoTapOverlay.classList.add('hidden');
+    });
+
+    ['touchstart', 'click', 'scroll'].forEach(evt => {
+      document.addEventListener(evt, function startVideo() {
+        heroVideoEl.play().catch(() => {});
+        document.removeEventListener(evt, startVideo);
+      }, { once: true, passive: true });
+    });
+
     // ===== SCROLL HERO CONTROLLER =====
     const navbar = document.getElementById('navbar');
     const heroSection = document.getElementById('hero');
     const heroClip = document.getElementById('heroClip');
-    const heroVideo = document.getElementById('heroVideo');
+    const heroVideo = heroVideoEl;
     const heroContent = document.getElementById('heroContent');
     const heroScrollHint = document.getElementById('heroScrollHint');
-    const HERO_SCROLL_HEIGHT = 2000;
+    const isMobile = window.innerWidth < 768;
+    const HERO_SCROLL_HEIGHT = isMobile ? 1200 : 2000;
+
+    heroSection.style.height = `calc(${HERO_SCROLL_HEIGHT}px + 100dvh)`;
 
     function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
     function easeOutQuad(t) { return 1 - Math.pow(1 - t, 2); }
@@ -987,7 +1049,7 @@
       const clipRaw = Math.min(1, progress / 0.8);
       const clipEased = easeOutCubic(clipRaw);
 
-      const startX = 30, startY = 20;
+      const startX = isMobile ? 25 : 30, startY = isMobile ? 18 : 20;
       const x1 = startX * (1 - clipEased);
       const y1 = startY * (1 - clipEased);
       const x2 = (100 - startX) + startX * clipEased;
@@ -1044,7 +1106,7 @@
       navbar.classList.remove('nav-hero-hidden');
       navbar.classList.add('nav-hero-visible');
       navbar.style.opacity = '';
-      heroSection.style.height = '100vh';
+      heroSection.style.height = '100dvh';
     } else {
       window.addEventListener('scroll', () => requestAnimationFrame(updateHeroScroll), { passive: true });
       updateHeroScroll();
